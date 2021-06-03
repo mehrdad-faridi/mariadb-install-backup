@@ -5,6 +5,16 @@ This respository will help you to install MariaDB on the remote host (CentOS 7) 
 All the backup script will generate a log file `/var/log/mybackup-mariadb.log` due to get more details of backup result.
 <br><br><br>
 
+# what you can do with this script:
+- add MAriaDB repo and Install(on remote host)
+- create full backup oof mysql
+- create database(s) backup
+- create table(s) backup
+- auto craete backup based on crontab
+- auto remove old backup file
+- log file of backup result
+
+<br><br>
 
 # Tree of directories and files
 ```

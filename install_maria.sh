@@ -116,7 +116,6 @@ read -p "$green_color Choose one of the above number:$default_color" MENU_NUMBER
 #the below function is for add the mariadb 10.5 repo on centos 7.(we used the Frankfurt repo)
 repo_func(){
 ssh -Tq -i /home/mehrdad/Downloads/ultratendency_rsa -p$HOST_PORT $HOST_USER@$HOST_IP << EOT
-#ssh -Tq -i /media/mehrdad/41d1ea6d-8ff7-456f-ab86-1c6de57e2c01/life-again/nima-key -p$HOST_PORT $HOST_USER@$HOST_IP << EOT
 if [ ! -f "/etc/yum.repos.d/MariaDB.repo" ]
 then
     echo "MariaDB.repo does not exist on your filesystem."
