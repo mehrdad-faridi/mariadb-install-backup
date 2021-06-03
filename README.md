@@ -1,6 +1,8 @@
 # mariadb-install-backup
 This respository will help you to install MariaDB on the remote host (CentOS 7) and also you can choose what type of MariaDB backup you need, like Full backup, database(s) backup and table(s) backup.
+<br>
 
+All the backup script will generate a log file `/var/log/mybackup-mariadb.log` due to get more details of backup result.
 <br><br><br>
 
 
