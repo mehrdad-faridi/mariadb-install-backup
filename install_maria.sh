@@ -115,7 +115,7 @@ read -p "$green_color Choose one of the above number:$default_color" MENU_NUMBER
 
 #the below function is for add the mariadb 10.5 repo on centos 7.(we used the Frankfurt repo)
 repo_func(){
-ssh -Tq -i /home/mehrdad/Downloads/ultratendency_rsa -p$HOST_PORT $HOST_USER@$HOST_IP << EOT
+ssh -Tq -p$HOST_PORT $HOST_USER@$HOST_IP << EOT
 if [ ! -f "/etc/yum.repos.d/MariaDB.repo" ]
 then
     echo "MariaDB.repo does not exist on your filesystem."
@@ -138,7 +138,7 @@ EOT
 #Install the MariaDB server and client packages using yum, same as other CentOS package:
 maria_install_func(){
 
-ssh -Tq -i /home/mehrdad/Downloads/ultratendency_rsa -p$HOST_PORT $HOST_USER@$HOST_IP << 'EOT'
+ssh -Tq -p$HOST_PORT $HOST_USER@$HOST_IP << 'EOT'
 if [[ `systemctl is-active mariadb` != "active" ]]
 then
 	sudo yum install MariaDB-server MariaDB-client -y -q
@@ -175,7 +175,7 @@ EOT
 # the below function is for taking full backup of all the databases and tables
 full_backup_func(){
 
-ssh -Tq -i /home/mehrdad/Downloads/ultratendency_rsa -p$HOST_PORT $HOST_USER@$HOST_IP << EOT
+ssh -Tq -p$HOST_PORT $HOST_USER@$HOST_IP << EOT
 	if [[ -f "$SCRIPT_DIR/$FULL_BP_SCRIPT_NAME" ]]
 	then
 		sudo sed -i '/$FULL_BP_SCRIPT_NAME/d' /etc/crontab
@@ -192,12 +192,12 @@ EOF
 		echo -e "\n$blue_color Shcedule job set for full backup.$default_color"
 	fi
 EOT
-scp -i /home/mehrdad/Downloads/ultratendency_rsa -P$HOST_PORT ${PWD}/$FULL_BP_SCRIPT_NAME $HOST_USER@$HOST_IP:$SCRIPT_DIR &> /dev/null
+scp -P$HOST_PORT ${PWD}/$FULL_BP_SCRIPT_NAME $HOST_USER@$HOST_IP:$SCRIPT_DIR &> /dev/null
 if [ $? -ne 0 ]; then
     echo "Error while transferring!"
 else
     echo "Copy has been transferred successfully!"
-ssh -Tq -i /home/mehrdad/Downloads/ultratendency_rsa -p$HOST_PORT $HOST_USER@$HOST_IP << EOT
+ssh -Tq -p$HOST_PORT $HOST_USER@$HOST_IP << EOT
 sudo chmod +x $SCRIPT_DIR/$FULL_BP_SCRIPT_NAME
 sed -i 's/DB_USER=.*/DB_USER="$DB_USER"/' $SCRIPT_DIR/$FULL_BP_SCRIPT_NAME
 sed -i 's/DB_PASS=.*/DB_PASS="$DB_PASS"/' $SCRIPT_DIR/$FULL_BP_SCRIPT_NAME
@@ -212,7 +212,7 @@ fi
 
 # the below function get only backup from your database(s).
 database_backup_func(){
-ssh -Tq -i /home/mehrdad/Downloads/ultratendency_rsa -p$HOST_PORT $HOST_USER@$HOST_IP << EOT
+ssh -Tq -p$HOST_PORT $HOST_USER@$HOST_IP << EOT
 	if [[ -f "$SCRIPT_DIR/$DATABASE_BP_SCRIPT_NAME" ]]
 	then
 	        sudo sed -i '/$DATABASE_BP_SCRIPT_NAME/d' /etc/crontab
@@ -229,7 +229,7 @@ EOF
 	        echo -e "\n$blue_color Shcedule job set for database backup.$default_color"
 	fi
 EOT
-scp -i /home/mehrdad/Downloads/ultratendency_rsa -P$HOST_PORT ${PWD}/$DATABASE_BP_SCRIPT_NAME $HOST_USER@$HOST_IP:$SCRIPT_DIR/ &> /dev/null
+scp -P$HOST_PORT ${PWD}/$DATABASE_BP_SCRIPT_NAME $HOST_USER@$HOST_IP:$SCRIPT_DIR/ &> /dev/null
 if [ $? -ne 0 ]; then
     echo "Error while transferring!"
 else
@@ -251,7 +251,7 @@ fi
 
 # the below function get only backup from specific table(s).
 table_backup_func(){
-ssh -Tq -i /home/mehrdad/Downloads/ultratendency_rsa -p$HOST_PORT $HOST_USER@$HOST_IP << EOT
+ssh -Tq -p$HOST_PORT $HOST_USER@$HOST_IP << EOT
         if [[ -f "$SCRIPT_DIR/$TABLE_BP_SCRIPT_NAME" ]]
         then
                 sudo sed -i '/$TABLE_BP_SCRIPT_NAME/d' /etc/crontab
@@ -268,12 +268,12 @@ EOF
                 echo -e "\n$blue_color Shcedule job set for table backup.$default_color"
         fi
 EOT
-scp -i /home/mehrdad/Downloads/ultratendency_rsa -P$HOST_PORT ${PWD}/$TABLE_BP_SCRIPT_NAME $HOST_USER@$HOST_IP:$SCRIPT_DIR/ &> /dev/null
+scp -P$HOST_PORT ${PWD}/$TABLE_BP_SCRIPT_NAME $HOST_USER@$HOST_IP:$SCRIPT_DIR/ &> /dev/null
 if [ $? -ne 0 ]; then
     echo "Error while transferring!"
 else
     echo "Copy has been transferred successfully!"
-ssh -Tq -i /home/mehrdad/Downloads/ultratendency_rsa -p$HOST_PORT $HOST_USER@$HOST_IP << EOT
+ssh -p$HOST_PORT $HOST_USER@$HOST_IP << EOT
 sudo chmod +x $SCRIPT_DIR/$TABLE_BP_SCRIPT_NAME
 sed -i 's/DB_USER=.*/DB_USER="$DB_USER"/' $SCRIPT_DIR/$TABLE_BP_SCRIPT_NAME
 sed -i 's/DB_PASS=.*/DB_PASS="$DB_PASS"/' $SCRIPT_DIR/$TABLE_BP_SCRIPT_NAME
@@ -292,4 +292,3 @@ while true
 do
    default_func
 done
-
